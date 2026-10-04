@@ -1,73 +1,58 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Sudoku Solver API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A small historical NestJS exercise that solves a 9 x 9 Sudoku board with recursive backtracking and renders the result as an HTML table.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## What it demonstrates
 
-## Description
+- A depth-first backtracking solver
+- Row, column, and 3 x 3 subgrid validation
+- A minimal NestJS controller and service
+- HTML rendering of the solved board
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Run locally
 
-## Installation
+Requirements:
+
+- Node.js 18 or newer
+- npm
 
 ```bash
-$ npm install
+npm ci
+npm run build
+npm run start:dev
 ```
 
-## Running the app
+The server listens on `http://localhost:3000`.
 
-```bash
-# development
-$ npm run start
+Pass the board through the `data` query parameter as 81 characters. Use digits for fixed cells and `.` for empty cells:
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```text
+GET /?data=53..7....6..195....98....6.8...6...34..8..6...6...28....419..5....8..79
 ```
 
-## Test
+The response is an HTML table containing the solved board.
 
-```bash
-# unit tests
-$ npm run test
+## How it works
 
-# e2e tests
-$ npm run test:e2e
+1. The service converts the 81-character input into a two-dimensional board.
+2. The solver finds the next empty cell.
+3. It tries the digits 1 through 9 and rejects values already present in the row, column, or subgrid.
+4. When a choice leads to a dead end, it restores the empty cell and tries the next digit.
+5. A complete board is rendered as HTML.
 
-# test coverage
-$ npm run test:cov
-```
+## Current limitations
 
-## Support
+- The endpoint does not validate input length or allowed characters.
+- Invalid or unsolvable boards do not receive a structured error response.
+- The HTML response is assembled directly in the service.
+- No automated tests are committed.
+- The dependencies are historical and currently have known audit findings.
+- The project is an educational sample and is not production ready.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Verification
 
-## Stay in touch
+The current source compiles with `npm run build`. The configured Jest command completes with `--passWithNoTests` because the repository contains no test files.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Status
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+This repository is retained as a historical algorithms and backend-framework exercise. It is not a featured portfolio project.
